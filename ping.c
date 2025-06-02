@@ -14,6 +14,7 @@ struct Game {
 };
 
 void sdl_initialise(struct Game *game);
+void shutdown(struct Game *game);
 
 int main (int argc, char *argv[]) {
 
@@ -25,7 +26,17 @@ int main (int argc, char *argv[]) {
     sdl_initialise(&game);
 
     while (1) { 
-        //TODO: add an event manager so when i click on the X that shutdown eveverything
+        SDL_Event event;
+        while(SDL_PollEvent(&event)) {
+            switch(event.type) {
+                case SDL_QUIT:
+                    shutdown(&game);
+                break;
+                default:
+                    break;
+            }
+        }
+
         SDL_RenderClear(game.renderer);
 
         SDL_RenderPresent(game.renderer);
@@ -43,4 +54,9 @@ void sdl_initialise (struct Game *game) {
     game->renderer = SDL_CreateRenderer(game->window, -1, 0);
 }
 
-//TODO: add a function to shutdown the program 
+void shutdown(struct Game *game) {
+    SDL_DestroyRenderer(game->renderer);
+    SDL_DestroyWindow(game->window);
+    SDL_Quit();
+    exit(EXIT_SUCCESS);
+}
