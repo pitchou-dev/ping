@@ -10,14 +10,23 @@
 #define PADDLE_WIDTH 20
 #define PADDLE_HEIGHT 100
 #define PADDLE_VELOCITY 5
+#define BALL_VELOCITY 5 // to modify 
+#define BALL_SIZE 10
 
 struct Game {
     SDL_Window *window;
     SDL_Renderer *renderer;
 };
 
+struct Ball {
+    SDL_Rect rect;
+    int x_vel;
+    int y_vel;
+};
+
 void sdl_initialise(struct Game *game);
 void shutdown(struct Game *game);
+int check_collision(struct Ball *ball, SDL_Rect *paddle);
 
 int main (int argc, char *argv[]) {
 
@@ -25,6 +34,14 @@ int main (int argc, char *argv[]) {
         .window = NULL,
         .renderer = NULL,
     };
+
+    struct Ball ball;
+    ball.rect.w = BALL_SIZE;
+    ball.rect.h = BALL_SIZE;
+    ball.rect.x = SCREEN_WIDTH / 2;
+    ball.rect.y = SCREEN_HEIGHT / 2;
+    ball.x_vel = BALL_VELOCITY;
+    ball.y_vel = 2;     //should be BALL_VELOCITY but keep it 2 for testing 
 
     SDL_Rect paddles[2];
     paddles[0].x = 50;
@@ -64,12 +81,20 @@ int main (int argc, char *argv[]) {
             paddles[1].y += PADDLE_VELOCITY;
         }
 
+        if (check_collision(&ball, &paddles[0]) || check_collision(&ball, &paddles[1])) {
+            ball.x_vel *= -1;
+        }
+
+        ball.rect.x += ball.x_vel;
+        ball.rect.y += ball.y_vel;
+
         SDL_SetRenderDrawColor(game.renderer, 255, 255, 255, SDL_ALPHA_OPAQUE);
         SDL_RenderClear(game.renderer);
 
         SDL_SetRenderDrawColor(game.renderer, 0, 0, 0, SDL_ALPHA_OPAQUE);
         SDL_RenderFillRect(game.renderer, &paddles[0]);
         SDL_RenderFillRect(game.renderer, &paddles[1]);
+        SDL_RenderFillRect(game.renderer, &ball.rect);
 
         SDL_RenderPresent(game.renderer);
         SDL_Delay(16);
@@ -92,3 +117,14 @@ void shutdown(struct Game *game) {
     SDL_Quit();
     exit(EXIT_SUCCESS);
 }
+
+int check_collision(struct Ball *ball, SDL_Rect *paddle) {
+    return (
+        ball->rect.x < paddle->x + paddle->w &&
+        ball->rect.x + ball->rect.w > paddle->x &&
+        ball->rect.y < paddle->y + paddle->h &&
+        ball->rect.y + ball->rect.h > paddle->y
+    );
+}
+
+// TODO: adding a function that manage collision between UP and DOWN screen and the ball
