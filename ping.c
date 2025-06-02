@@ -16,7 +16,11 @@ void sdl_initialise(struct Game *game);
 
 int main (int argc, char *argv[]) {
 
-    struct Game game;
+    struct Game game = {
+        .window = NULL,
+        .renderer = NULL,
+    };
+
     sdl_initialise(&game);
     return 0; 
 }
