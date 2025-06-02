@@ -27,7 +27,7 @@ int main (int argc, char *argv[]) {
 
     SDL_Rect paddles[2];
     paddles[0].x = 50;
-    paddles[1].x = SCREEN_WIDTH -50;
+    paddles[1].x = SCREEN_WIDTH - PADDLE_WIDTH -50;
     paddles[0].y = (SCREEN_HEIGHT - PADDLE_HEIGHT)/2;
     paddles[1].y = (SCREEN_HEIGHT - PADDLE_HEIGHT)/2;
     paddles[0].w = PADDLE_WIDTH;
