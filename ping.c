@@ -9,6 +9,7 @@
 #define SCREEN_HEIGHT 600
 #define PADDLE_WIDTH 20
 #define PADDLE_HEIGHT 100
+#define PADDLE_VELOCITY 5
 
 struct Game {
     SDL_Window *window;
@@ -47,6 +48,20 @@ int main (int argc, char *argv[]) {
                 default:
                     break;
             }
+        }
+
+        const Uint8 *state = SDL_GetKeyboardState(NULL);
+        if (state[SDL_SCANCODE_W] && paddles[0].y > 0) {
+            paddles[0].y -= PADDLE_VELOCITY;
+        }
+        if (state[SDL_SCANCODE_S] && paddles[0].y < SCREEN_HEIGHT - PADDLE_HEIGHT) {
+            paddles[0].y += PADDLE_VELOCITY;
+        }
+        if (state[SDL_SCANCODE_UP] && paddles[1].y > 0) {
+            paddles[1].y -= PADDLE_VELOCITY;
+        }
+        if (state[SDL_SCANCODE_DOWN] && paddles[1].y < SCREEN_HEIGHT - PADDLE_HEIGHT) {
+            paddles[1].y += PADDLE_VELOCITY;
         }
 
         SDL_SetRenderDrawColor(game.renderer, 255, 255, 255, SDL_ALPHA_OPAQUE);
