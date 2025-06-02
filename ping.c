@@ -7,6 +7,8 @@
 #define WINDOW_TITLE "ping pong game"
 #define SCREEN_WIDTH 1000
 #define SCREEN_HEIGHT 600
+#define PADDLE_WIDTH 20
+#define PADDLE_HEIGHT 100
 
 struct Game {
     SDL_Window *window;
@@ -23,6 +25,16 @@ int main (int argc, char *argv[]) {
         .renderer = NULL,
     };
 
+    SDL_Rect paddles[2];
+    paddles[0].x = 50;
+    paddles[1].x = SCREEN_WIDTH -50;
+    paddles[0].y = (SCREEN_HEIGHT - PADDLE_HEIGHT)/2;
+    paddles[1].y = (SCREEN_HEIGHT - PADDLE_HEIGHT)/2;
+    paddles[0].w = PADDLE_WIDTH;
+    paddles[1].w = PADDLE_WIDTH;
+    paddles[0].h = PADDLE_HEIGHT;
+    paddles[1].h = PADDLE_HEIGHT;
+
     sdl_initialise(&game);
 
     while (1) { 
@@ -37,7 +49,12 @@ int main (int argc, char *argv[]) {
             }
         }
 
+        SDL_SetRenderDrawColor(game.renderer, 255, 255, 255, SDL_ALPHA_OPAQUE);
         SDL_RenderClear(game.renderer);
+
+        SDL_SetRenderDrawColor(game.renderer, 0, 0, 0, SDL_ALPHA_OPAQUE);
+        SDL_RenderFillRect(game.renderer, &paddles[0]);
+        SDL_RenderFillRect(game.renderer, &paddles[1]);
 
         SDL_RenderPresent(game.renderer);
         SDL_Delay(16);
