@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_ttf.h>
+#include <time.h>
 
 #define WINDOW_TITLE "ping pong game"
 #define SCREEN_WIDTH 1000
@@ -22,6 +23,15 @@ int main (int argc, char *argv[]) {
     };
 
     sdl_initialise(&game);
+
+    while (1) { 
+        //TODO: add an event manager so when i click on the X that shutdown eveverything
+        SDL_RenderClear(game.renderer);
+
+        SDL_RenderPresent(game.renderer);
+        SDL_Delay(16);
+    }
+
     return 0; 
 }
 
@@ -32,3 +42,5 @@ void sdl_initialise (struct Game *game) {
 
     game->renderer = SDL_CreateRenderer(game->window, -1, 0);
 }
+
+//TODO: add a function to shutdown the program 
