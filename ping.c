@@ -27,6 +27,7 @@ struct Ball {
 void sdl_initialise(struct Game *game);
 void shutdown(struct Game *game);
 int check_collision(struct Ball *ball, SDL_Rect *paddle);
+int manage_screen_collision(struct Ball *ball);
 
 int main (int argc, char *argv[]) {
 
@@ -85,6 +86,8 @@ int main (int argc, char *argv[]) {
             ball.x_vel *= -1;
         }
 
+        manage_screen_collision(&ball);
+
         ball.rect.x += ball.x_vel;
         ball.rect.y += ball.y_vel;
 
@@ -127,4 +130,11 @@ int check_collision(struct Ball *ball, SDL_Rect *paddle) {
     );
 }
 
-// TODO: adding a function that manage collision between UP and DOWN screen and the ball
+int manage_screen_collision(struct Ball *ball) {
+    if (ball->rect.y < 0) {
+        ball->y_vel *= -1;
+    }
+    if (ball->rect.y > SCREEN_HEIGHT - BALL_SIZE) {
+        ball->y_vel *= -1;
+    }
+}
