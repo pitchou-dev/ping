@@ -1,3 +1,5 @@
+# THE GAME IS STILL IN DEVELOPMENT
+
 # 🏓 Pong SDL
 
 A simple remake of **Pong**, written in **C** using **SDL2**.  
